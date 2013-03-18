@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<script src = "http://lib.sinaapp.com/js/jquery/1.9.0/jquery.min.js"></script>
+		<style type="text/css">
+			.at, .topic, .link {
+				color: #0A8CD2;
+				text-decoration: none;
+			}
+			.at:hover, .topic:hover, .link:hover {
+				text-decoration: underline;
+			}
+		</style>
+	</head>
+		<div id="wt"></div>
+		<script>
+			var weiboText = "测试一大堆#标签1#哇啦哇啦#标签2#啊哈哈哈@鱼头III @鱼头I 一大堆字儿@鱼头II http://t.cn/zOMRBCG";
+			var userClass = "at";
+			var topicClass = "topic";
+			var linkClass = "link";
+			
+			//link
+			weiboText = weiboText.replace(/http:\/\/([0-9]|[a-z]|[A-Z]|[;\/?:@&=+$,-_.!~*’()%])+/gi, function(link) {
+				return KeyWordLink(
+					link,
+					link,
+					linkClass
+				).html();
+			});
+			//user
+			weiboText = weiboText.replace(/@[\u4e00-\u9fa5\w-_]+/gi, function(user) {
+				return KeyWordLink(
+					user,
+					"http://weibo.com/n/" + encodeURIComponent(user.replace(/@/, "")),
+					userClass
+				).html();
+			});
+			//topic
+			weiboText = weiboText.replace(/#[^#]+#/gi, function(topic) {
+				return KeyWordLink(
+					topic,
+					"http://huati.weibo.com/k/" + encodeURIComponent(topic.replace(/#/, "").replace(/#/, "")) + "?from=501",
+					topicClass
+				).html();
+			});
+			
+			$("#wt").append(weiboText);
+			
+			function KeyWordLink(KeyWord, Link, CssClass) {
+				var linkDOM =
+					$("<span></span>")
+						.append(
+							$("<a></a>")
+								.attr("href", Link)
+								.attr("target", "_blank")
+								.addClass(CssClass)
+								.html(KeyWord));
+				return linkDOM;
+			}
+		</script>		
+	<body>
+	</body>
+</html>
